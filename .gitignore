@@ -1,0 +1,6 @@
+/hooks
+/lib
+/platforms
+/plugins
+/www
+.npmignore
