@@ -12,5 +12,9 @@
     "lib",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "react": "^16.1.0",
+    "requirejs": "^2.3.5"
+  }
 }
