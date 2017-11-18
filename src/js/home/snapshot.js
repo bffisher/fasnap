@@ -5,18 +5,17 @@ define(function(require) {
   
   return function(){
     return (
-          <div className="snapshot">
-            <div className="termSelector">
-              <div>Prev</div>
-              <div>2017-11-07</div>
-              <div>Next</div>
-            </div>
-            <div className="amount">
-              <span>amount:</span><span>xxxxxx</span>
-            </div>
-            <div className="pie"></div>
-          </div>
-      );
+      <div className="snapshot">
+        <div className="termSelector">
+          <div>Prev</div>
+          <div>2017-11-07</div>
+          <div>Next</div>
+        </div>
+        <div className="amount">
+          <span>amount:</span><span>xxxxxx</span>
+        </div>
+        <div className="pie"></div>
+      </div>
+    );
   };
-
 });

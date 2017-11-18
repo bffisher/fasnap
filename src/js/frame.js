@@ -7,11 +7,11 @@ define(function(require) {
 
   return function(){
     return (
-        <div id="frame">
-          <Home />
-          <FootMenu />
-        </div>
-      );
+      <div id="frame">
+        <Home />
+        <FootMenu />
+      </div>
+    );
   };
 
 });

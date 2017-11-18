@@ -7,15 +7,15 @@ define(function(require) {
   
   return function(){
     return (
-        <div id="home">
-          <Snapshot>
-          </Snapshot>
-          <div className="tendency">
-            <div className="durationSelector"></div>
-            <div className="line"></div>
-          </div>
+      <div id="home">
+        <Snapshot>
+        </Snapshot>
+        <div className="tendency">
+          <div className="durationSelector"></div>
+          <div className="line"></div>
         </div>
-      );
+      </div>
+    );
   };
 
 });

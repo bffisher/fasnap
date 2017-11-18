@@ -5,9 +5,9 @@ define(function(require){
   
   return function(){
     return (
-        <div id="foot">
-        </div>
-      );
+      <div id="foot">
+      </div>
+    );
   };
 
 });
