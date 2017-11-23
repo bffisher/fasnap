@@ -1,3 +1,4 @@
+/temp
 /hooks
 /lib
 /platforms
@@ -5,4 +6,3 @@
 /www
 /node_modules
 .npmignore
-package-lock.json
