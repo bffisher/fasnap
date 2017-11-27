@@ -4,10 +4,6 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
-import { ChartModule } from 'angular2-highcharts';
-
-import * as Highcharts from 'highcharts';
-
 import { MyApp } from './app.component';
 import { TabsPage } from './tabs/tabs'
 import { HomePage } from './home/home';
@@ -16,7 +12,7 @@ import { AboutPage } from './about/about';
 
 @NgModule({
   declarations: [MyApp, TabsPage, HomePage, HistoryPage, AboutPage],
-  imports: [BrowserModule, IonicModule.forRoot(MyApp), ChartModule.forRoot(Highcharts)],
+  imports: [BrowserModule, IonicModule.forRoot(MyApp)],
   bootstrap: [IonicApp],
   entryComponents: [MyApp, TabsPage, HomePage, HistoryPage, AboutPage],
   providers: [

@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content padding>
-  <p>
+  <ion-item>
     <button ion-button color="light" icon-start>
       <ion-icon name='arrow-back'></ion-icon>
       Back
@@ -15,12 +15,15 @@
       Next
       <ion-icon name='arrow-forward'></ion-icon>
     </button>
-  </p>
-  <p>
+  </ion-item>
+  <ion-item>
     <span>total:</span>
     <span>8888888</span>
-  </p>
-  <p>
-    <chart [options]="options"></chart>
-  </p>
+  </ion-item>
+  <ion-item>
+    <canvas id="myChart1"></canvas>
+  </ion-item>
+  <ion-item>
+    <canvas id="myChart2"></canvas>
+  </ion-item>
 </ion-content>
