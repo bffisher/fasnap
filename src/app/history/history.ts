@@ -1,16 +1,20 @@
 import { Component } from '@angular/core';
 
+import { DataService } from '../service/data.service';
+import { SnapshotEntity } from '../service/entity/snapshot.entity';
+import { HistoryEvent } from '../service/event/history.event';
+
 @Component({
   templateUrl: 'history.html'
 })
 export class HistoryPage {
-  items;
+  items: SnapshotEntity[];
 
-  constructor() {
-    this.items = ['2017-11-08', '2017-10-08', '2017-09-08', '2017-08-08']
+  constructor(private dataServ: DataService, private historyEvent: HistoryEvent) {
+    this.items = this.dataServ.getSnapshotList(6, 0);
   }
 
   itemSelected(item) {
-    console.log(item);
+    this.historyEvent.itemClicked(item);
   }
 }

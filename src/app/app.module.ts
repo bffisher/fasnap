@@ -10,6 +10,9 @@ import { HomePage } from './home/home';
 import { HistoryPage } from './history/history';
 import { AboutPage } from './about/about';
 
+import {DataService} from './service/data.service'
+import {ChartsService} from './service/charts.service'
+
 @NgModule({
   declarations: [MyApp, TabsPage, HomePage, HistoryPage, AboutPage],
   imports: [BrowserModule, IonicModule.forRoot(MyApp)],
@@ -18,7 +21,8 @@ import { AboutPage } from './about/about';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    DataService, ChartsService
   ]
 })
 export class AppModule { }

@@ -4,11 +4,12 @@
 	</ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="history-content" padding>
 	<p>
 		<ion-list>
 			<button ion-item *ngFor="let item of items" (click)="itemSelected(item)">
-				{{ item }}
+				<span class='list-item-date'>{{ item.date | date:"longDate" }}</span>
+				<span>{{item.amount | currency:'RMB':'symbol':'.0'}}</span>
 			</button>
 		</ion-list>
 	</p>

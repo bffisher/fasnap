@@ -4,26 +4,31 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="home-content" padding>
   <ion-item>
-    <button ion-button color="light" icon-start>
+    <button ion-button color="light" icon-start (click)="gotoPrevDate()">
       <ion-icon name='arrow-back'></ion-icon>
       Back
     </button>
-    <span>2017-11-24</span>
-    <button ion-button color="light" icon-end disabled>
+    <span>{{curDate | date:"longDate"}}</span>
+    <button ion-button color="light" icon-end (click)="gotoNextDate()">
       Next
       <ion-icon name='arrow-forward'></ion-icon>
     </button>
   </ion-item>
   <ion-item>
     <span>total:</span>
-    <span>8888888</span>
+    <span>{{curAmount | currency:'RMB':'symbol':'.0'}}</span>
   </ion-item>
   <ion-item>
-    <canvas id="myChart1"></canvas>
+    <canvas id="pieChart"></canvas>
+    <div>
+      <button (click)="rendPieChart('platform')">Platform</button>
+      <button (click)="rendPieChart('risk')">Risk</button>
+      <button (click)="rendPieChart('term')">Term</button>
+    </div>
   </ion-item>
   <ion-item>
-    <canvas id="myChart2"></canvas>
+    <canvas id="lineChart"></canvas>
   </ion-item>
 </ion-content>
