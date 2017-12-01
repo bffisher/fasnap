@@ -1,9 +1,16 @@
 
+import { Injectable } from '@angular/core';
 import { SnapshotEntity } from './entity/snapshot.entity';
 import { ItemEntity } from './entity/item.entity'
 import { CategoryEntity } from './entity/category.entity';
+import { DBService } from './db.service';
 
+@Injectable()
 export class DataService {
+  constructor(private dbServ: DBService) {
+
+  }
+
   getLastSnapshot(): SnapshotEntity {
     return { date: new Date(2017, 0, 8), amount: 111111 };
   }
@@ -26,9 +33,9 @@ export class DataService {
 
   getItems(date: Date): ItemEntity[] {
     return [
-      { platform: 'bank', risk: 'low', term: 'current', name: 'xxxx', amount: 10000 },
-      { platform: 'internet', risk: 'middle', term: 'short', name: 'xxxx', amount: 2000 },
-      { platform: 'securities', risk: 'height', term: 'current', name: 'xxxx', amount: 333 }
+      { date: new Date(2016, 11, 8), no: 1, platform: 'bank', risk: 'low', term: 'current', name: 'xxxx', amount: 10000 },
+      { date: new Date(2016, 11, 8), no: 2, platform: 'internet', risk: 'middle', term: 'short', name: 'xxxx', amount: 2000 },
+      { date: new Date(2016, 11, 8), no: 3, platform: 'securities', risk: 'height', term: 'current', name: 'xxxx', amount: 333 }
     ]
   }
 
