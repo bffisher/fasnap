@@ -1,4 +1,4 @@
-export interface ItemEntity{
+export interface AssetItemEntity{
   date:Date;
   no:number;
   platform:string;

@@ -1,0 +1,22 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>Snapshot Edit</ion-title>
+	</ion-navbar>
+</ion-header>
+<ion-content class="outer-content">
+	<ion-list>
+		<ion-item>
+			<ion-label>Date</ion-label>
+			<ion-datetime displayFormat="MMM DD YYYY" [(ngModel)]="snapshot.date"></ion-datetime>
+		</ion-item>
+	</ion-list>
+	<ion-list>
+		<ion-item>
+			<button ion-button full (click)="add()">Add a Asset Item</button>
+			<button ion-item *ngFor="let item of items" (click)="itemSelected(item)">
+				<span>{{ item.name }}</span>
+				<span>{{ item.amount | currency:'RMB':'symbol':'.0' }}</span>
+			</button>
+		</ion-item>
+	</ion-list>
+</ion-content>

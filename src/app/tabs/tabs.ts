@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 
 import { HomePage } from '../home/home';
+import { EditIndexPage } from '../edit/index';
 import { HistoryPage } from '../history/history';
 import { AboutPage } from '../about/about';
 import { HistoryEvent } from '../service/event/history.event';
@@ -11,12 +12,13 @@ import { Tabs } from 'ionic-angular';
   providers: [HistoryEvent]
 })
 export class TabsPage {
-  @ViewChild('myTabs')
+  @ViewChild('myTabs') 
   tabRef: Tabs;
 
   tab1Root = HomePage;
-  tab2Root = HistoryPage;
-  tab3Root = AboutPage;
+  tab2Root = EditIndexPage;
+  tab3Root = HistoryPage;
+  tab4Root = AboutPage;
 
   constructor(private historyEvent: HistoryEvent) {
     this.historyEvent.itemClickedSource$.subscribe((item) => {

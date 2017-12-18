@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { SQLite, SQLiteObject } from "@ionic-native/sqlite";
 
 import { SnapshotEntity } from "./entity/snapshot.entity";
-import { ItemEntity } from "./entity/item.entity";
+import { AssetItemEntity } from "./entity/assetItem.entity";
 
 @Injectable()
 export class DBService {
@@ -24,7 +24,7 @@ export class DBService {
       [this.date2text(entity.date), entity.amount]);
   }
 
-  insertItem(entity: ItemEntity): Promise<any> {
+  insertItem(entity: AssetItemEntity): Promise<any> {
     return this.db.executeSql('insert into item (date, no, platform, risk, term, name, amount) values(?, ?, ?, ?, ?, ?, ?)',
       [this.date2text(entity.date), entity.no, entity.platform, entity.risk, entity.term, entity.name, entity.amount]);
   }
@@ -34,7 +34,7 @@ export class DBService {
       [entity.amount, this.date2text(entity.date)]);
   }
 
-  updateItem(entity: ItemEntity): Promise<any> {
+  updateItem(entity: AssetItemEntity): Promise<any> {
     return this.db.executeSql('upate item set platform = ?, risk = ?, term = ?, name = ?, amount = ? where date = ?, no = ?)',
       [entity.platform, entity.risk, entity.term, entity.name, entity.amount, this.date2text(entity.date), entity.no]);
   }
@@ -100,11 +100,11 @@ export class DBService {
       });
   }
 
-  selectItems(date: Date): Promise<ItemEntity[]> {
+  selectItems(date: Date): Promise<AssetItemEntity[]> {
     var dateParam: string = this.date2text(date);
     return this.db.executeSql('SELECT * FROM item WHERE date = ?', [dateParam]).then((res) => {
       if (res.rows.count > 0) {
-        let items: ItemEntity[] = [];
+        let items: AssetItemEntity[] = [];
         for (let i = 0; i < res.rows.count; ++i) {
           items.push({
             date: date,

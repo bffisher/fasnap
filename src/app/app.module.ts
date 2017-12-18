@@ -8,6 +8,9 @@ import { SQLite } from '@ionic-native/sqlite';
 import { MyApp } from './app.component';
 import { TabsPage } from './tabs/tabs'
 import { HomePage } from './home/home';
+import { EditIndexPage } from './edit/index';
+import { EditSnapshotPage } from './edit/snapshot';
+import { EditAssetItemPage } from './edit/assetItem';
 import { HistoryPage } from './history/history';
 import { AboutPage } from './about/about';
 
@@ -15,11 +18,21 @@ import { DBService } from './service/db.service';
 import { DataService } from './service/data.service';
 import { ChartsService } from './service/charts.service';
 
+var myComponents = [
+  MyApp, 
+  TabsPage, 
+  HomePage, 
+  EditIndexPage, 
+  EditSnapshotPage, 
+  EditAssetItemPage, 
+  HistoryPage, 
+  AboutPage];
+
 @NgModule({
-  declarations: [MyApp, TabsPage, HomePage, HistoryPage, AboutPage],
+  declarations: myComponents,
   imports: [BrowserModule, IonicModule.forRoot(MyApp)],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp, TabsPage, HomePage, HistoryPage, AboutPage],
+  entryComponents: myComponents,
   providers: [
     StatusBar, SplashScreen, SQLite,
     { provide: ErrorHandler, useClass: IonicErrorHandler },

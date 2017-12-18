@@ -1,6 +1,6 @@
 import { DataService } from "./data.service";
 import { Injectable } from "@angular/core";
-import { ItemEntity } from "./entity/Item.entity";
+import { AssetItemEntity } from "./entity/assetItem.entity";
 import { SnapshotEntity } from "./entity/snapshot.entity";
 
 @Injectable()
@@ -8,7 +8,7 @@ export class ChartsService {
   constructor(private dataServ: DataService) { }
 
   getPieOptions(date: Date, type: string) {
-    var items: ItemEntity[] = this.dataServ.getItems(date);
+    var items: AssetItemEntity[] = this.dataServ.getAssetItems(date);
     var values = {};
 
     if (items) {
@@ -21,7 +21,7 @@ export class ChartsService {
       }
     }
 
-    var categories = this.dataServ.getCategories(type);
+    var categories = this.dataServ.getCategory(type);
     var names: string[] = [];
     var data = [];
     for (let i = 0; i < categories.length; ++i) {
