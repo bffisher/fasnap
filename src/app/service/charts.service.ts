@@ -7,7 +7,7 @@ import { SnapshotEntity } from "./entity/snapshot.entity";
 export class ChartsService {
   constructor(private dataServ: DataService) { }
 
-  getPieOptions(date: Date, type: string) {
+  getPieOptions(date: string, type: string) {
     var items: AssetItemEntity[] = this.dataServ.getAssetItems(date);
     var values = {};
 
@@ -73,14 +73,14 @@ export class ChartsService {
     };
   }
 
-  getLineOptions(date: Date) {
+  getLineOptions(date: string) {
     var snapshotList: SnapshotEntity[] = this.dataServ.getSnapshotList(6, 0);
     var dateList: string[] = [];
     var values: number[] = [];
 
     if (snapshotList) {
       for (let i = 0; i < snapshotList.length; ++i) {
-        dateList.push(snapshotList[i].date.toDateString());
+        dateList.push(snapshotList[i].date);
         values.push(snapshotList[i].amount);
       }
     }

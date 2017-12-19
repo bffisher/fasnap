@@ -9,6 +9,7 @@ import { CategoryItemEntity } from '../service/entity/categoryItem.entity';
   templateUrl: 'assetItem.html'
 })
 export class EditAssetItemPage {
+  isOKEnabled: boolean = true;
   orignItem: AssetItemEntity;
   item: AssetItemEntity;
 

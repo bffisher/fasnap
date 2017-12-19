@@ -5,23 +5,28 @@ import { DataService } from '../service/data.service';
 import { ChartsService } from '../service/charts.service';
 import { SnapshotEntity } from '../service/entity/snapshot.entity';
 import { HistoryEvent } from '../service/event/history.event';
+import { Util } from '../service/util';
 
 @Component({
   templateUrl: 'home.html'
 })
 export class HomePage implements AfterViewInit {
-  private curDate: Date;
+  private curDate: string;
   private curAmount: number;
   private pieChart: ECharts.ECharts;
   private lineChart: ECharts.ECharts;
 
-  constructor(private dataServ: DataService, private chartsServ: ChartsService, private historyEvent: HistoryEvent) {
+  constructor(
+    private dataServ: DataService, 
+    private chartsServ: ChartsService, 
+    private historyEvent: HistoryEvent
+  ) {
     var lastSnapshot: SnapshotEntity = this.dataServ.getLastSnapshot();
     if (lastSnapshot) {
       this.curDate = lastSnapshot.date;
       this.curAmount = lastSnapshot.amount;
     } else {
-      this.curDate = new Date();
+      this.curDate = Util.date2str(new Date());
       this.curAmount = 0;
     }
 

@@ -8,35 +8,35 @@
   <ion-list>
     <ion-item>
       <ion-label>Platform</ion-label>
-      <ion-select [(ngModel)]="item.platform">
+      <ion-select interface="popover" [(ngModel)]="item.platform">
         <ion-option *ngFor="let item of platfomrs" [value]="item.value">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Risk</ion-label>
-      <ion-select [(ngModel)]="item.risk">
+      <ion-select interface="popover" [(ngModel)]="item.risk">
         <ion-option *ngFor="let item of risks" [value]="item.value">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Term</ion-label>
-      <ion-select [(ngModel)]="item.term">
+      <ion-select interface="popover" [(ngModel)]="item.term">
         <ion-option *ngFor="let item of terms" [value]="item.value">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <!-- <ion-label fixed>Name</ion-label> -->
-      <ion-input type="text" placeholder ="Name" [(ngModel)]="item.name"></ion-input>
+      <ion-input type="text" placeholder="Name" clearInput [(ngModel)]="item.name" ></ion-input>
     </ion-item>
     <ion-item>
       <!-- <ion-label fixed>Amount</ion-label> -->
-      <ion-input type="number" placeholder ="Amount" [(ngModel)]="item.amount"></ion-input>
+      <ion-input type="number" placeholder="Amount" clearInput min="0" [(ngModel)]="item.amount"></ion-input>
     </ion-item>
   </ion-list>
 
   <ion-list>
     <ion-item>
-      <button ion-button full (click)="ok()">Ok</button>
+      <button ion-button full [disabled]="!item.name || !item.amount" (click)="ok() ">Ok</button>
     </ion-item>
   </ion-list>
 </ion-content>

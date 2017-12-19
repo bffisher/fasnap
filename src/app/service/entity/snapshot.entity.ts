@@ -1,5 +1,5 @@
 export interface SnapshotEntity{
-  date: Date;
+  date: string;
   amount: number;
   // items: AssetItemEntity[];
 }

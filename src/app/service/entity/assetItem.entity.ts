@@ -1,5 +1,5 @@
 export interface AssetItemEntity{
-  date:Date;
+  date:string;
   no:number;
   platform:string;
   risk:string;

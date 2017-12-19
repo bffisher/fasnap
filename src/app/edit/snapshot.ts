@@ -5,40 +5,54 @@ import { EditAssetItemPage } from './assetItem'
 //import { DataService } from '../service/data.service';
 import { AssetItemEntity } from '../service/entity/assetItem.entity';
 import { SnapshotEntity } from '../service/entity/snapshot.entity';
-import { DateTime } from 'ionic-angular/components/datetime/datetime';
+import { Util } from '../service/util';
 
 @Component({
   templateUrl: 'snapshot.html'
 })
 export class EditSnapshotPage {
-  snapshot: SnapshotEntity
-
-  items: AssetItemEntity[]
+  snapshot: SnapshotEntity;
+  items: AssetItemEntity[];
+  editedItem: AssetItemEntity;
+  addedItem: AssetItemEntity;
 
   constructor(public navCtrl: NavController/*, private dataServ: DataService*/) {
     this.snapshot = {
-      date: new Date(2011,1,1),
+      date: Util.date2str(new Date(2011, 1, 1)),
       amount: 0
     };
 
     this.items = [];
   }
 
-  add(){
-    var item: AssetItemEntity = {
+  ionViewDidEnter() {
+    if (this.addedItem) {
+      this.items.push(this.addedItem);
+    }
+
+    this.editedItem = null;
+    this.addedItem = null;
+  }
+
+  add() {
+    this.addedItem = {
       date: this.snapshot.date,
       no: this.items.length,
       platform: 'bank',
-      risk:  "low",
-      term:  'current',
+      risk: "low",
+      term: 'current',
       name: '',
-      amount: 0
+      amount: null
     }
-    this.items.push(item);
-    this.itemSelected(item);
+    this.navEditAssetItemPage(this.addedItem);
   }
 
-  itemSelected(item) {
-    this.navCtrl.push(EditAssetItemPage, {item: item});
+  itemSelected(item: AssetItemEntity) {
+    this.editedItem = item;
+    this.navEditAssetItemPage(item);
+  }
+
+  navEditAssetItemPage(item: AssetItemEntity) {
+    this.navCtrl.push(EditAssetItemPage, { item: item });
   }
 }

@@ -21,22 +21,22 @@ export class DBService {
 
   insertSnapshot(entity: SnapshotEntity): Promise<any> {
     return this.db.executeSql('insert into snapshot (date, amount) values(?, ?)',
-      [this.date2text(entity.date), entity.amount]);
+      [entity.date, entity.amount]);
   }
 
   insertItem(entity: AssetItemEntity): Promise<any> {
     return this.db.executeSql('insert into item (date, no, platform, risk, term, name, amount) values(?, ?, ?, ?, ?, ?, ?)',
-      [this.date2text(entity.date), entity.no, entity.platform, entity.risk, entity.term, entity.name, entity.amount]);
+      [entity.date, entity.no, entity.platform, entity.risk, entity.term, entity.name, entity.amount]);
   }
 
   updateSnapshot(entity: SnapshotEntity): Promise<any> {
     return this.db.executeSql('upate snapshot set amount = ? WHERE date = ?',
-      [entity.amount, this.date2text(entity.date)]);
+      [entity.amount, entity.date]);
   }
 
   updateItem(entity: AssetItemEntity): Promise<any> {
     return this.db.executeSql('upate item set platform = ?, risk = ?, term = ?, name = ?, amount = ? where date = ?, no = ?)',
-      [entity.platform, entity.risk, entity.term, entity.name, entity.amount, this.date2text(entity.date), entity.no]);
+      [entity.platform, entity.risk, entity.term, entity.name, entity.amount, entity.date, entity.no]);
   }
 
   selectLastSnapshot(): Promise<SnapshotEntity> {
@@ -44,44 +44,39 @@ export class DBService {
       .then((res) => {
         if (res.rows.count > 0) {
           return {
-            date: this.text2date(res.rows.item(0).date),
+            date: res.rows.item(0).date,
             amount: res.rows.item(0).amount
           };
         }
       });
   }
 
-  selectPrevSnapshot(date: Date): Promise<SnapshotEntity> {
-    var dateParam: string = this.date2text(date);
+  selectPrevSnapshot(dateParam: Date): Promise<SnapshotEntity> {
     return this.db.executeSql('SELECT * FROM snapshot WHERE date < ? ORDER BY date DESC LIMIT 1', [dateParam])
       .then((res) => {
         if (res.rows.count > 0) {
           return {
-            date: this.text2date(res.rows.item(0).date),
+            date: res.rows.item(0).date,
             amount: res.rows.item(0).amount
           };
         }
       });
   }
 
-  selectNextSnapshot(date: Date): Promise<SnapshotEntity> {
-    var dateParam: string = this.date2text(date);
+  selectNextSnapshot(dateParam: Date): Promise<SnapshotEntity> {
     return this.db.executeSql('SELECT * FROM snapshot WHERE date > ? ORDER BY date LIMIT 1', [dateParam])
       .then((res) => {
         if (res.rows.count > 0) {
           return {
-            date: this.text2date(res.rows.item(0).date),
+            date: res.rows.item(0).date,
             amount: res.rows.item(0).amount
           };
         }
       });
   }
 
-  selectSnapshotList(count: number, date: Date): Promise<SnapshotEntity[]> {
-    var dateParam: string;
-    if (date) {
-      dateParam = this.date2text(date);
-    } else {
+  selectSnapshotList(count: number, dateParam: string): Promise<SnapshotEntity[]> {
+    if (!dateParam) {
       dateParam = '9999-99-99';
     }
 
@@ -91,7 +86,7 @@ export class DBService {
           let entities: SnapshotEntity[] = [];
           for (let i = 0; i < res.rows.count; ++i) {
             entities.push({
-              date: this.text2date(res.rows.item(i).date),
+              date: res.rows.item(i).date,
               amount: res.rows.item(i).amount
             });
           }
@@ -100,14 +95,13 @@ export class DBService {
       });
   }
 
-  selectItems(date: Date): Promise<AssetItemEntity[]> {
-    var dateParam: string = this.date2text(date);
+  selectItems(dateParam: string): Promise<AssetItemEntity[]> {
     return this.db.executeSql('SELECT * FROM item WHERE date = ?', [dateParam]).then((res) => {
       if (res.rows.count > 0) {
         let items: AssetItemEntity[] = [];
         for (let i = 0; i < res.rows.count; ++i) {
           items.push({
-            date: date,
+            date: dateParam,
             no: res.rows.item(i).no,
             platform: res.rows.item(i).platform,
             risk: res.rows.item(i).risk,
@@ -119,13 +113,5 @@ export class DBService {
         return items;
       }
     });
-  }
-
-  private text2date(text: string): Date {
-    return new Date(text);
-  }
-
-  private date2text(date: Date): string {
-    return date.toISOString().substr(0, 10);
   }
 }
