@@ -1,0 +1,19 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>List</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content class="list-content" padding>
+	<ion-list>
+		<ion-item>
+			<button ion-button full (click)="add()">Add a asset snapshot</button>
+		</ion-item>
+	</ion-list>
+	<ion-list>
+		<button ion-item *ngFor="let item of items" (click)="itemClicked(item)">
+			<span class="list-item-date">{{ item.date | date:"longDate" }}</span>
+			<span class="list-item-amount">{{item.amount | currency:'￥':'.0'}}</span>
+		</button>
+	</ion-list>
+</ion-content>

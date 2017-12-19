@@ -6,16 +6,28 @@
 <ion-content class="snapshot-content" padding>
 	<ion-list>
 		<ion-item>
-			<ion-datetime placeholder="Please select a date" displayFormat="MMM DD YYYY" [(ngModel)]="snapshot.date"></ion-datetime>
+			<button ion-button icon-left (click)="add()">
+				<ion-icon name='add'></ion-icon>
+				Add a asset item
+			</button>
+			<button ion-button icon-left [disabled]="!items.length" (click)="save()">
+				<ion-icon name='checkmark'></ion-icon>
+				Save snapshot
+			</button>
 		</ion-item>
-	</ion-list>
-	<ion-list>
-		<ion-item>
-			<button ion-button full (click)="add()">Add a asset item</button>
+		<ion-item class="list-item-date" *ngIf="isDateEnable">
+			<ion-label>
+				<ion-datetime displayFormat="MMM DD YYYY" [(ngModel)]="snapshot.date"></ion-datetime>
+			</ion-label>
+			<ion-label class="list-item-amount">{{ snapshot.amount | currency:'￥':'.0' }}</ion-label>
+		</ion-item>
+		<ion-item *ngIf="!isDateEnable">
+			<ion-label>{{snapshot.date | date:"longDate"}}</ion-label>
+			<ion-label class="list-item-amount">{{ snapshot.amount | currency:'￥':'.0' }}</ion-label>
 		</ion-item>
 		<ion-item *ngFor="let item of items" (click)="itemSelected(item)">
-			<span class="list-item-name">{{ item.name }}</span>
-			<span class="list-item-amount">{{ item.amount | currency:'￥':'.0' }}</span>
+			<ion-label>{{ item.name }}</ion-label>
+			<ion-label class="list-item-amount">{{ item.amount | currency:'￥':'.0' }}</ion-label>
 		</ion-item>
 	</ion-list>
 </ion-content>

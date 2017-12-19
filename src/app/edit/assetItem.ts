@@ -9,7 +9,6 @@ import { CategoryItemEntity } from '../service/entity/categoryItem.entity';
   templateUrl: 'assetItem.html'
 })
 export class EditAssetItemPage {
-  isOKEnabled: boolean = true;
   orignItem: AssetItemEntity;
   item: AssetItemEntity;
 
@@ -17,7 +16,11 @@ export class EditAssetItemPage {
   risks: CategoryItemEntity[]
   terms: CategoryItemEntity[]
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private dataServ: DataService) {
+  constructor(
+      public navCtrl: NavController, 
+      public navParams: NavParams, 
+      private dataServ: DataService
+    ) {
     this.orignItem = this.navParams.get('item');
 
     this.item = {
@@ -40,6 +43,10 @@ export class EditAssetItemPage {
     this.orignItem.risk = this.item.risk;
     this.orignItem.term = this.item.term;
     this.orignItem.name = this.item.name;
+    if(typeof this.item.amount === 'string'){
+      let amountStr:string = this.item.amount;
+      this.item.amount = parseInt(amountStr);
+    }
     this.orignItem.amount = this.item.amount;
 
     this.navCtrl.pop();

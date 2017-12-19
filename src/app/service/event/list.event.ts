@@ -3,7 +3,7 @@ import { Subject }    from 'rxjs/Subject';
 import { SnapshotEntity } from '../entity/snapshot.entity';
  
 @Injectable()
-export class HistoryEvent {
+export class ListEvent {
   // Observable SnapshotEntity sources
   private itemClickedSource = new Subject<SnapshotEntity>();
  

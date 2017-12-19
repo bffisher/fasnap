@@ -4,7 +4,7 @@ import ECharts from 'echarts';
 import { DataService } from '../service/data.service';
 import { ChartsService } from '../service/charts.service';
 import { SnapshotEntity } from '../service/entity/snapshot.entity';
-import { HistoryEvent } from '../service/event/history.event';
+import { ListEvent } from '../service/event/list.event';
 import { Util } from '../service/util';
 
 @Component({
@@ -19,7 +19,7 @@ export class HomePage implements AfterViewInit {
   constructor(
     private dataServ: DataService, 
     private chartsServ: ChartsService, 
-    private historyEvent: HistoryEvent
+    private listEvent: ListEvent
   ) {
     var lastSnapshot: SnapshotEntity = this.dataServ.getLastSnapshot();
     if (lastSnapshot) {
@@ -30,7 +30,7 @@ export class HomePage implements AfterViewInit {
       this.curAmount = 0;
     }
 
-    this.historyEvent.itemClickedSource$.subscribe((item) => {
+    this.listEvent.itemClickedSource$.subscribe((item) => {
       this.curDate = item.date;
       this.curAmount = item.amount;
       this.rendPieChart('platform');
