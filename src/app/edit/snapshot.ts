@@ -14,52 +14,62 @@ export class EditSnapshotPage {
   isDateEnable: boolean;
   originSnapshot: SnapshotEntity
   snapshot: SnapshotEntity;
-  items: AssetItemEntity[];
-  editedItem: AssetItemEntity;
-  addedItem: AssetItemEntity;
+  editedAssetItem: AssetItemEntity;
+  addedAssetItem: AssetItemEntity;
 
   constructor(
-      public navCtrl: NavController,
-      public actionsheet: ActionSheetController,
-      public alert: AlertController,
-      public navParams: NavParams,
-      private dataServ: DataService
-    ) {
-    this.snapshot = {
-      date: Util.date2str(new Date(2011, 1, 1)),
-      amount: 0
-    };
-
+    public navCtrl: NavController,
+    public actionsheet: ActionSheetController,
+    public alert: AlertController,
+    public navParams: NavParams,
+    private dataServ: DataService
+  ) {
     this.originSnapshot = this.navParams.get('item');
-    this.snapshot = {
-      date: this.originSnapshot.date,
-      amount: this.originSnapshot.amount
-    }
 
-    if(this.snapshot.date){
-      this.items = this.dataServ.getAssetItems(this.snapshot.date);
+    if (this.originSnapshot.date) {
+      this.snapshot = {
+        date: this.originSnapshot.date,
+        amount: this.originSnapshot.amount,
+        assetItems: []
+      };
+      this.originSnapshot.assetItems.forEach((element) => {
+        let item: AssetItemEntity = {
+          date: element.date,
+          no: element.no,
+          platform: element.platform,
+          risk: element.risk,
+          term: element.term,
+          name: element.name,
+          amount: element.amount
+        }
+        this.snapshot.assetItems.push(item);
+      });
       this.isDateEnable = false;
-    }else{
+    } else {
       this.snapshot = {
         date: Util.date2str(new Date()),
-        amount: 0
-      }
-      this.items = [];
+        amount: 0,
+        assetItems: []
+      };
       this.isDateEnable = true;
     }
   }
 
   ionViewDidEnter() {
-    if (this.addedItem) {
-      this.items.push(this.addedItem);
+    if (this.addedAssetItem) {
+      this.snapshot.assetItems.push(this.addedAssetItem);
     }
 
-    this.editedItem = null;
-    this.addedItem = null;
+    this.editedAssetItem = null;
+    this.addedAssetItem = null;
 
+    this.calculateAmount();
+  }
+
+  calculateAmount() {
     this.snapshot.amount = 0;
-    for(let i = 0; i < this.items.length; i++){
-      this.snapshot.amount += this.items[i].amount;
+    for (let i = 0; i < this.snapshot.assetItems.length; i++) {
+      this.snapshot.amount += this.snapshot.assetItems[i].amount;
     }
   }
 
@@ -92,18 +102,44 @@ export class EditSnapshotPage {
     actionSheetImp.present();
   }
 
-  save(){
-    this.originSnapshot.date = this.snapshot.date;
-    this.originSnapshot.amount = this.snapshot.amount;
-    this.navCtrl.pop();
+  save() {
+    if (this.isDateEnable) {
+      //add mode
+      this.dataServ.getSnapshotList(this.snapshot.date).then((res) => {
+        if (res && res.length > 0) {
+          //exist
+          let alertImp = this.alert.create({
+            subTitle: 'Data of "' + this.snapshot.date + '" already exists!',
+            buttons: [
+              {
+                text: 'OK'
+              }]
+          });
+          alertImp.present();
+        } else {
+          this.doSave();
+        }
+      });
+    } else {
+      this.doSave();
+    }
+  }
+
+  doSave() {
+    this.dataServ.saveSnapshot(this.snapshot).then(() => {
+      this.originSnapshot.date = this.snapshot.date;
+      this.originSnapshot.amount = this.snapshot.amount;
+      this.originSnapshot.assetItems = this.snapshot.assetItems;
+      this.navCtrl.pop();
+    });
   }
 
   add() {
     var lastNo = 0;
-    if(this.items.length > 0){
-      lastNo = this.items[this.items.length - 1].no + 1;
+    if (this.snapshot.assetItems.length > 0) {
+      lastNo = this.snapshot.assetItems[this.snapshot.assetItems.length - 1].no + 1;
     }
-    this.addedItem = {
+    this.addedAssetItem = {
       date: this.snapshot.date,
       no: lastNo,
       platform: 'bank',
@@ -112,15 +148,15 @@ export class EditSnapshotPage {
       name: '',
       amount: null
     }
-    this.navEditAssetItemPage(this.addedItem);
+    this.navEditAssetItemPage(this.addedAssetItem);
   }
 
-  private edit(item:AssetItemEntity){
-    this.editedItem = item;
+  private edit(item: AssetItemEntity) {
+    this.editedAssetItem = item;
     this.navEditAssetItemPage(item);
   }
 
-  private del(item:AssetItemEntity){
+  private del(item: AssetItemEntity) {
     let alertImp = this.alert.create({
       //title: 'Warn!',
       subTitle: 'Do you want to delete this item?',
@@ -134,14 +170,15 @@ export class EditSnapshotPage {
           text: 'OK',
           handler: data => {
             let index4del = -1;
-            for(let i = 0; i < this.items.length; i++){
-              if(this.items[i] === item){
+            for (let i = 0; i < this.snapshot.assetItems.length; i++) {
+              if (this.snapshot.assetItems[i] === item) {
                 index4del = i;
               }
             }
 
-            if(index4del >= 0){
-              this.items.splice(index4del, 1);
+            if (index4del >= 0) {
+              this.snapshot.assetItems.splice(index4del, 1);
+              this.calculateAmount();
             }
           }
         }

@@ -10,7 +10,7 @@
 				<ion-icon name='add'></ion-icon>
 				Add a asset item
 			</button>
-			<button ion-button icon-left [disabled]="!items.length" (click)="save()">
+			<button ion-button icon-left [disabled]="!snapshot.assetItems.length" (click)="save()">
 				<ion-icon name='checkmark'></ion-icon>
 				Save snapshot
 			</button>
@@ -25,7 +25,7 @@
 			<ion-label>{{snapshot.date | date:"longDate"}}</ion-label>
 			<ion-label class="list-item-amount">{{ snapshot.amount | currency:'￥':'.0' }}</ion-label>
 		</ion-item>
-		<ion-item *ngFor="let item of items" (click)="itemSelected(item)">
+		<ion-item *ngFor="let item of snapshot.assetItems" (click)="itemSelected(item)">
 			<ion-label>{{ item.name }}</ion-label>
 			<ion-label class="list-item-amount">{{ item.amount | currency:'￥':'.0' }}</ion-label>
 		</ion-item>

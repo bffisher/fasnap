@@ -11,62 +11,71 @@ import { Util } from '../service/util';
   templateUrl: 'home.html'
 })
 export class HomePage implements AfterViewInit {
-  private curDate: string;
-  private curAmount: number;
+  private curSnapshot: SnapshotEntity;
   private pieChart: ECharts.ECharts;
   private lineChart: ECharts.ECharts;
 
   constructor(
-    private dataServ: DataService, 
-    private chartsServ: ChartsService, 
+    private dataServ: DataService,
+    private chartsServ: ChartsService,
     private listEvent: ListEvent
   ) {
-    var lastSnapshot: SnapshotEntity = this.dataServ.getLastSnapshot();
-    if (lastSnapshot) {
-      this.curDate = lastSnapshot.date;
-      this.curAmount = lastSnapshot.amount;
-    } else {
-      this.curDate = Util.date2str(new Date());
-      this.curAmount = 0;
-    }
+
+  }
+
+  ngAfterViewInit() {
+    this.pieChart = ECharts.init(<HTMLCanvasElement>document.getElementById('pieChart'));
+    this.lineChart = ECharts.init(<HTMLCanvasElement>document.getElementById('lineChart'));
+
+    this.dataServ.getLastSnapshot().then((result) => {
+      if (result) {
+        this.curSnapshot = result;
+      } else {
+        this.curSnapshot = {
+          date: Util.date2str(new Date()),
+          amount: 0,
+          assetItems: []
+        };
+      }
+      this.rendPieChart('platform');
+      this.rendLineChart();
+    });
 
     this.listEvent.itemClickedSource$.subscribe((item) => {
-      this.curDate = item.date;
-      this.curAmount = item.amount;
+      this.curSnapshot = item;
       this.rendPieChart('platform');
       this.rendLineChart();
     })
   }
 
-  ngAfterViewInit() {
-    this.pieChart = ECharts.init(<HTMLCanvasElement>document.getElementById('pieChart'));
-    this.rendPieChart('platform');
-
-    this.lineChart = ECharts.init(<HTMLCanvasElement>document.getElementById('lineChart'));
-    this.rendLineChart();
-  }
-
   gotoPrevDate() {
-    var snapshot: SnapshotEntity = this.dataServ.getPrevSnapshot(this.curDate);
-    if (snapshot) {
-      this.curDate = snapshot.date;
-      this.curAmount = snapshot.amount;
-    }
+    this.dataServ.getPrevSnapshot(this.curSnapshot.date).then((res) => {
+      if (res) {
+        this.curSnapshot = res;
+        this.rendPieChart('platform');
+        this.rendLineChart();
+      }
+    });
   }
 
   gotoNextDate() {
-    var snapshot: SnapshotEntity = this.dataServ.getNextSnapshot(this.curDate);
-    if (snapshot) {
-      this.curDate = snapshot.date;
-      this.curAmount = snapshot.amount;
-    }
+    this.dataServ.getNextSnapshot(this.curSnapshot.date).then((res) => {
+      if (res) {
+        this.curSnapshot = res;
+        this.rendPieChart('platform');
+        this.rendLineChart();
+      }
+    });
   }
 
   rendPieChart(type: string) {
-    this.pieChart.setOption(this.chartsServ.getPieOptions(this.curDate, type));
+    this.pieChart.setOption(this.chartsServ.getPieOptions(this.curSnapshot.assetItems, type));
   }
 
   rendLineChart() {
-    this.lineChart.setOption(this.chartsServ.getLineOptions(this.curDate));
+    this.chartsServ.getLineOptions(this.curSnapshot.date).then((res) => {
+      this.lineChart.setOption(res);
+    });
+
   }
 }

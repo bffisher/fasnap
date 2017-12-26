@@ -1,10 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicStorageModule } from '@ionic/storage';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { SQLite } from '@ionic-native/sqlite';
 
 import { MyApp } from './app.component';
 import { TabsPage } from './tabs/tabs'
@@ -31,11 +30,11 @@ var myComponents = [
 
 @NgModule({
   declarations: myComponents,
-  imports: [BrowserModule, IonicModule.forRoot(MyApp)],
+  imports: [BrowserModule, IonicModule.forRoot(MyApp), IonicStorageModule.forRoot()],
   bootstrap: [IonicApp],
   entryComponents: myComponents,
   providers: [
-    StatusBar, SplashScreen, SQLite,
+    StatusBar, SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     DBService, DataService, ChartsService
   ]

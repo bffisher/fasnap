@@ -16,25 +16,31 @@ export class ListPage {
   items: SnapshotEntity[];
 
   constructor(
-      private nav:NavController,
-      public actionsheet: ActionSheetController,
-      public alert: AlertController,
-      private dataServ: DataService, 
-      private listEvent: ListEvent
-    ) {
-    this.items = this.dataServ.getSnapshotList(6, 0);
+    private nav: NavController,
+    public actionsheet: ActionSheetController,
+    public alert: AlertController,
+    private dataServ: DataService,
+    private listEvent: ListEvent
+  ) {
+  }
+
+  ionViewDidLoad() {
+    this.items = [];
+    this.dataServ.getSnapshotList(null, null, true).then((res) => {
+      this.items = res;
+    })
   }
 
   ionViewDidEnter() {
     if (this.addedItem) {
-      this.items.push(this.addedItem);
+      this.items.splice(0, 0, this.addedItem);
     }
 
     this.editedItem = null;
     this.addedItem = null;
   }
 
-  itemClicked(item: SnapshotEntity){
+  itemClicked(item: SnapshotEntity) {
     let actionSheetImp = this.actionsheet.create({
       title: 'Options',
       cssClass: 'action-sheets-basic-page',
@@ -68,20 +74,21 @@ export class ListPage {
     actionSheetImp.present();
   }
 
-  add(){
+  add() {
     this.addedItem = {
       date: null,
-      amount: null
+      amount: null,
+      assetItems: []
     }
-    this.nav.push(EditSnapshotPage, {item: this.addedItem});
-  }
-  
-  edit(item){
-    this.editedItem = item;
-    this.nav.push(EditSnapshotPage, {item: item});
+    this.nav.push(EditSnapshotPage, { item: this.addedItem });
   }
 
-  del(item){
+  edit(item) {
+    this.editedItem = item;
+    this.nav.push(EditSnapshotPage, { item: item });
+  }
+
+  del(item) {
     let alertImp = this.alert.create({
       //title: 'Warn!',
       subTitle: 'Do you want to delete this item?',
@@ -94,16 +101,18 @@ export class ListPage {
         {
           text: 'OK',
           handler: data => {
-            let index4del = -1;
-            for(let i = 0; i < this.items.length; i++){
-              if(this.items[i] === item){
-                index4del = i;
+            this.dataServ.deleteSnapshot(item.date).then(() => {
+              let index4del = -1;
+              for (let i = 0; i < this.items.length; i++) {
+                if (this.items[i] === item) {
+                  index4del = i;
+                }
               }
-            }
 
-            if(index4del >= 0){
-              this.items.splice(index4del, 1);
-            }
+              if (index4del >= 0) {
+                this.items.splice(index4del, 1);
+              }
+            });
           }
         }
       ]

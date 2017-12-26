@@ -7,8 +7,7 @@ import { SnapshotEntity } from "./entity/snapshot.entity";
 export class ChartsService {
   constructor(private dataServ: DataService) { }
 
-  getPieOptions(date: string, type: string) {
-    var items: AssetItemEntity[] = this.dataServ.getAssetItems(date);
+  getPieOptions(items: AssetItemEntity[], type: string) {
     var values = {};
 
     if (items) {
@@ -73,52 +72,55 @@ export class ChartsService {
     };
   }
 
-  getLineOptions(date: string) {
-    var snapshotList: SnapshotEntity[] = this.dataServ.getSnapshotList(6, 0);
-    var dateList: string[] = [];
-    var values: number[] = [];
+  getLineOptions(date: string):Promise<any> {
+    return this.dataServ.getSnapshotList(date, 6).then((result) => {
+      var snapshotList: SnapshotEntity[] = result;
+      var dateList: string[] = [];
+      var values: number[] = [];
 
-    if (snapshotList) {
-      for (let i = 0; i < snapshotList.length; ++i) {
-        dateList.push(snapshotList[i].date);
-        values.push(snapshotList[i].amount);
+      if (snapshotList) {
+        for (let i = 0; i < snapshotList.length; ++i) {
+          dateList.push(snapshotList[i].date);
+          values.push(snapshotList[i].amount);
+        }
       }
-    }
 
-    return {
-      // title: {
-      //   text: 'xxxx',
-      //   subtext: 'yyy'
-      // },
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: dateList
-      },
-      yAxis: {
-        type: 'value',
-        axisLabel: {
-          formatter: '{value}'
-        }
-      },
-      series: [
-        {
-          // name: 'xxx',
-          type: 'line',
-          data: values,
-          markPoint: {
-            data: [
-              { type: 'max', name: 'max' },
-              { type: 'min', name: 'min' }
-            ]
-          },
-          // markLine: {
-          //   data: [
-          //     { type: 'average', name: 'average' }
-          //   ]
-          // }
-        }
-      ]
-    }
+      return {
+        // title: {
+        //   text: 'xxxx',
+        //   subtext: 'yyy'
+        // },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: dateList
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: '{value}'
+          }
+        },
+        series: [
+          {
+            // name: 'xxx',
+            type: 'line',
+            data: values,
+            markPoint: {
+              data: [
+                { type: 'max', name: 'max' },
+                { type: 'min', name: 'min' }
+              ]
+            },
+            // markLine: {
+            //   data: [
+            //     { type: 'average', name: 'average' }
+            //   ]
+            // }
+          }
+        ]
+      }
+    });
+
   }
 }

@@ -1,5 +1,7 @@
+import { AssetItemEntity } from "./assetItem.entity";
+
 export interface SnapshotEntity{
   date: string;
   amount: number;
-  // items: AssetItemEntity[];
+  assetItems: AssetItemEntity[];
 }

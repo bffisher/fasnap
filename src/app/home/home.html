@@ -10,7 +10,7 @@
       <ion-icon name='arrow-back'></ion-icon>
       Back
     </button>
-    <span>{{curDate | date:"longDate"}}</span>
+    <span>{{curSnapshot && curSnapshot.date | date:"longDate"}}</span>
     <button ion-button color="light" icon-end (click)="gotoNextDate()">
       Next
       <ion-icon name='arrow-forward'></ion-icon>
@@ -18,7 +18,7 @@
   </ion-item>
   <ion-item>
     <span>total:</span>
-    <span>{{curAmount | currency:'￥':'.0'}}</span>
+    <span>{{curSnapshot && curSnapshot.amount | currency:'￥':'.0'}}</span>
   </ion-item>
   <ion-item>
     <canvas id="pieChart"></canvas>

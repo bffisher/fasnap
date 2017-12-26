@@ -1,43 +1,56 @@
 
 import { Injectable } from '@angular/core';
 import { SnapshotEntity } from './entity/snapshot.entity';
-import { AssetItemEntity } from './entity/assetItem.entity'
 import { CategoryItemEntity } from './entity/categoryItem.entity';
-import { Util } from './util';
-// import { DBService } from './db.service';
+import { DBService } from './db.service';
 
 @Injectable()
 export class DataService {
-  constructor(/*private dbServ: DBService*/) {
 
+  constructor(private dbServ: DBService) {
   }
 
-  getLastSnapshot(): SnapshotEntity {
-    return { date: Util.date2str(new Date(2017, 0, 8)), amount: 111111 };
+  init(): Promise<any> {
+    return this.dbServ.open('my.db',
+      [{ name: 'snapshot', options: { keyPath: 'date' } }]
+    );
   }
 
-  getPrevSnapshot(date: string): SnapshotEntity {
-    return { date: Util.date2str(new Date(2016, 11, 8)), amount: 101111 };
+  saveSnapshot(snapshot: SnapshotEntity): Promise<any> {
+    return this.dbServ.save('snapshot', [snapshot]);
   }
 
-  getNextSnapshot(date: string): SnapshotEntity {
-    return { date: Util.date2str(new Date(2017, 1, 8)), amount: 121111 };
+  deleteSnapshot(date: string): Promise<any> {
+    return this.dbServ.delete('snapshot', [date]);
   }
 
-  getSnapshotList(pageSize: number, pageIndex: number): SnapshotEntity[] {
-    return [
-      { date: Util.date2str(new Date(2016, 11, 8)), amount: 101111 },
-      { date: Util.date2str(new Date(2017, 0, 8)), amount: 111111 },
-      { date: Util.date2str(new Date(2017, 1, 8)), amount: 221111 }
-    ];
+  getLastSnapshot(): Promise<SnapshotEntity> {
+    return this.dbServ.select('snapshot', null, 1, 'prev').then((res) => {
+      return res[0];
+    });
   }
 
-  getAssetItems(date: string): AssetItemEntity[] {
-    return [
-      { date: Util.date2str(new Date(2016, 11, 8)), no: 1, platform: 'bank', risk: 'low', term: 'current', name: 'xxxx', amount: 10000 },
-      { date: Util.date2str(new Date(2016, 11, 8)), no: 2, platform: 'internet', risk: 'middle', term: 'short', name: 'xxxx', amount: 2000 },
-      { date: Util.date2str( new Date(2016, 11, 8)), no: 3, platform: 'securities', risk: 'height', term: 'current', name: 'xxxx', amount: 333 }
-    ]
+  getPrevSnapshot(date: string): Promise<SnapshotEntity> {
+    var range: IDBKeyRange = IDBKeyRange.upperBound(date, true);
+    return this.dbServ.select('snapshot', range, 1).then((res) => {
+      return res[0];
+    });
+  }
+
+  getNextSnapshot(date: string): Promise<SnapshotEntity> {
+    var range: IDBKeyRange = IDBKeyRange.lowerBound(date, true);
+    return this.dbServ.select('snapshot', range, 1).then((res) => {
+      return res[0];
+    });
+  }
+
+  getSnapshotList(date: string, count: number = -1, desc: boolean = false): Promise<SnapshotEntity[]> {
+    var range: IDBKeyRange = null;
+    if (date) {
+      range = IDBKeyRange.upperBound(date);
+    }
+
+    return this.dbServ.select('snapshot', range, count, desc ? 'prev' : undefined);
   }
 
   getCategory(type: string): CategoryItemEntity[] {
