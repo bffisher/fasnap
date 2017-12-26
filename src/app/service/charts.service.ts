@@ -8,7 +8,7 @@ export class ChartsService {
   constructor(private dataServ: DataService) { }
 
   getPieOptions(items: AssetItemEntity[], type: string) {
-    var values = {};
+    var values = {}, total = 0;
 
     if (items) {
       for (let i = 0; i < items.length; ++i) {
@@ -17,6 +17,7 @@ export class ChartsService {
           values[typeVal] = 0;
         }
         values[typeVal] += items[i].amount;
+        total += items[i].amount;
       }
     }
 
@@ -24,55 +25,44 @@ export class ChartsService {
     var names: string[] = [];
     var data = [];
     for (let i = 0; i < categories.length; ++i) {
-      names.push(categories[i].name);
-      if (values[categories[i].value] === undefined) {
-        data.push({ name: categories[i].name, value: 0 });
-      } else {
-        data.push({ name: categories[i].name, value: values[categories[i].value] });
-      }
+      let name = categories[i].name;
+      let value = values[categories[i].value];
+      value = value ? value : 0;
+      name = name + '(' + Math.round(value / total * 100) + '%)';
+      names.push(name);
+      data.push({ name: name, value: value });
     }
 
     return {
-      tooltip: {
-        trigger: 'item',
-        formatter: "{a} <br/>{b}: {c} ({d}%)"
-      },
       legend: {
         orient: 'vertical',
         x: 'left',
-        data: names
+        data: names,
+        top: '15%'
       },
-      series: [
-        {
-          name: type,
-          type: 'pie',
-          radius: ['50%', '70%'],
-          avoidLabelOverlap: false,
-          label: {
-            normal: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              show: true,
-              textStyle: {
-                fontSize: '30',
-                fontWeight: 'bold'
-              }
-            }
+      series: [{
+        name: type,
+        type: 'pie',
+        center: ['70%', '50%'],
+        radius: '90%',
+        legendHoverLink: false,
+        hoverAnimation: false,
+        label: {
+          normal: {
+            show: false,
           },
-          labelLine: {
-            normal: {
-              show: false
-            }
-          },
-          data: data
-        }
-      ]
+        },
+        labelLine: {
+          normal: {
+            show: false
+          }
+        },
+        data: data
+      }]
     };
   }
 
-  getLineOptions(date: string):Promise<any> {
+  getLineOptions(date: string): Promise<any> {
     return this.dataServ.getSnapshotList(date, 6).then((result) => {
       var snapshotList: SnapshotEntity[] = result;
       var dateList: string[] = [];
@@ -86,37 +76,22 @@ export class ChartsService {
       }
 
       return {
-        // title: {
-        //   text: 'xxxx',
-        //   subtext: 'yyy'
-        // },
         xAxis: {
-          type: 'category',
-          boundaryGap: false,
           data: dateList
         },
         yAxis: {
-          type: 'value',
-          axisLabel: {
-            formatter: '{value}'
-          }
+          scale: true
+        },
+        grid: {
+          left: 50,
+          top: '10%'
         },
         series: [
           {
-            // name: 'xxx',
             type: 'line',
-            data: values,
-            markPoint: {
-              data: [
-                { type: 'max', name: 'max' },
-                { type: 'min', name: 'min' }
-              ]
-            },
-            // markLine: {
-            //   data: [
-            //     { type: 'average', name: 'average' }
-            //   ]
-            // }
+            hoverAnimation: false,
+            legendHoverLink: false,
+            data: values
           }
         ]
       }
