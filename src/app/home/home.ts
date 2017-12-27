@@ -5,7 +5,6 @@ import { DataService } from '../service/data.service';
 import { ChartsService } from '../service/charts.service';
 import { SnapshotEntity } from '../service/entity/snapshot.entity';
 import { ListEvent } from '../service/event/list.event';
-import { Util } from '../service/util';
 
 @Component({
   templateUrl: 'home.html'
@@ -20,7 +19,6 @@ export class HomePage implements AfterViewInit {
     private chartsServ: ChartsService,
     private listEvent: ListEvent
   ) {
-
   }
 
   ngAfterViewInit() {
@@ -29,43 +27,61 @@ export class HomePage implements AfterViewInit {
 
     this.dataServ.getLastSnapshot().then((result) => {
       if (result) {
-        this.curSnapshot = result;
+        this.bindSnapshot(result);
       } else {
-        this.curSnapshot = {
-          date: Util.date2str(new Date()),
-          amount: 0,
-          assetItems: []
-        };
+        this.bindSnapshot(this.dataServ.newSnapshot());
       }
-      this.rendPieChart('platform');
-      this.rendLineChart();
     });
 
     this.listEvent.itemClickedSource$.subscribe((item) => {
-      this.curSnapshot = item;
-      this.rendPieChart('platform');
-      this.rendLineChart();
-    })
+      this.bindSnapshot(item);
+    });
+
+    this.listEvent.itemAddedSource$.subscribe((item) => {
+      if (!this.curSnapshot.date) {
+        this.bindSnapshot(item);
+      }
+    });
+
+    this.listEvent.itemModifiedSource$.subscribe((item) => {
+      if (this.curSnapshot.date === item.date) {
+        this.bindSnapshot(item);
+      }
+    });
+
+    this.listEvent.itemDeletedSource$.subscribe((item) => {
+      if (this.curSnapshot.date === item.date) {
+        this.gotoNextDate().then(() => {
+          if (this.curSnapshot.date === item.date) {
+            //next date snapshot not exits
+            this.gotoPrevDate().then(() => {
+              if (this.curSnapshot.date === item.date) {
+                //prrev date snapshot not exits
+                this.bindSnapshot(this.dataServ.newSnapshot());
+              }
+            });
+          }
+        });
+      }
+    });
   }
 
   gotoPrevDate() {
-    this.dataServ.getPrevSnapshot(this.curSnapshot.date).then((res) => {
-      if (res) {
-        this.curSnapshot = res;
-        this.rendPieChart('platform');
-        this.rendLineChart();
-      }
+    return this.dataServ.getPrevSnapshot(this.curSnapshot.date).then((res) => {
+      res && this.bindSnapshot(res);
     });
   }
 
   gotoNextDate() {
-    this.dataServ.getNextSnapshot(this.curSnapshot.date).then((res) => {
-      if (res) {
-        this.curSnapshot = res;
-        this.rendPieChart('platform');
-        this.rendLineChart();
-      }
+    return this.dataServ.getNextSnapshot(this.curSnapshot.date).then((res) => {
+      res && this.bindSnapshot(res);
     });
+  }
+
+  bindSnapshot(item: SnapshotEntity) {
+    this.curSnapshot = item;
+    this.rendPieChart('platform');
+    this.rendLineChart();
   }
 
   rendPieChart(type: string) {
@@ -76,6 +92,5 @@ export class HomePage implements AfterViewInit {
     this.chartsServ.getLineOptions(this.curSnapshot.date).then((res) => {
       this.lineChart.setOption(res);
     });
-
   }
 }

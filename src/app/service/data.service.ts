@@ -4,7 +4,6 @@ import { SnapshotEntity } from './entity/snapshot.entity';
 import { CategoryItemEntity } from './entity/categoryItem.entity';
 import { DBService } from './db.service';
 import { AssetItemEntity } from './entity/assetItem.entity';
-import { Util } from './util';
 
 @Injectable()
 export class DataService {
@@ -82,7 +81,7 @@ export class DataService {
 
   newSnapshot(): SnapshotEntity {
     return {
-      date: Util.date2str(new Date()),
+      date: null,
       amount: 0,
       assetItems: []
     };

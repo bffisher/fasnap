@@ -5,6 +5,7 @@ import { EditAssetItemPage } from './assetItem'
 import { DataService } from '../service/data.service';
 import { AssetItemEntity } from '../service/entity/assetItem.entity';
 import { SnapshotEntity } from '../service/entity/snapshot.entity';
+import { Util } from '../service/util';
 
 @Component({
   templateUrl: 'snapshot.html'
@@ -31,13 +32,14 @@ export class EditSnapshotPage {
       //modify
       this.isDateEnable = false;
     } else {
-      //create
+      //add
+      this.snapshot.date = Util.date2str(new Date());
       this.isDateEnable = true;
     }
   }
 
   ionViewDidEnter() {
-    if (this.addedAssetItem) {
+    if (this.addedAssetItem && this.addedAssetItem.name) {
       this.snapshot.assetItems.push(this.addedAssetItem);
     }
 

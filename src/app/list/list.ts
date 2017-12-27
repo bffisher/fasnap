@@ -32,7 +32,7 @@ export class ListPage {
   }
 
   ionViewDidEnter() {
-    if (this.addedItem) {
+    if (this.addedItem && this.addedItem.date) {
       let len = this.items.length;
       for(let i = 0; i < len; i++){
         if(this.addedItem.date >= this.items[i].date){
@@ -44,6 +44,12 @@ export class ListPage {
       if(this.items.length === len){
         this.items.push(this.addedItem);
       }
+
+      this.listEvent.itemAdded(this.addedItem);
+    }
+    
+    if(this.editedItem){
+      this.listEvent.itemModified(this.editedItem);
     }
 
     this.editedItem = null;
@@ -121,7 +127,8 @@ export class ListPage {
               }
 
               if (index4del >= 0) {
-                this.items.splice(index4del, 1);
+                let deletedItem = this.items.splice(index4del, 1)[0];
+                this.listEvent.itemDeleted(deletedItem);
               }
             });
           }
