@@ -22,16 +22,7 @@ export class EditAssetItemPage {
       private dataServ: DataService
     ) {
     this.orignItem = this.navParams.get('item');
-
-    this.item = {
-      date: this.orignItem.date,
-      no: this.orignItem.no,
-      platform: this.orignItem.platform,
-      risk:  this.orignItem.risk,
-      term:  this.orignItem.term,
-      name: this.orignItem.name,
-      amount: this.orignItem.amount
-    };
+    this.item = this.dataServ.cloneAssetItem(this.orignItem);
 
     this.platfomrs = this.dataServ.getCategory('platform');
     this.risks = this.dataServ.getCategory('risk');

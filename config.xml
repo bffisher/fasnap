@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="bffisher.fasnap" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>fasnap</name>
-    <description>
-    </description>
+    <description />
     <author>bffisher</author>
     <content src="index.html" />
     <access origin="*" />
@@ -20,5 +19,9 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
-    <engine name="android" spec="^6.3.0" />
+    <plugin name="cordova-plugin-splashscreen" spec="^4.1.0" />
+    <preference name="orientation" value="portrait" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="4000" />
+    <engine name="android" spec="^6.4.0" />
 </widget>

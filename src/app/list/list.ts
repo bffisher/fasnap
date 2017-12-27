@@ -33,7 +33,17 @@ export class ListPage {
 
   ionViewDidEnter() {
     if (this.addedItem) {
-      this.items.splice(0, 0, this.addedItem);
+      let len = this.items.length;
+      for(let i = 0; i < len; i++){
+        if(this.addedItem.date >= this.items[i].date){
+          this.items.splice(i, 0, this.addedItem);
+          break;
+        }
+      }
+
+      if(this.items.length === len){
+        this.items.push(this.addedItem);
+      }
     }
 
     this.editedItem = null;
@@ -75,10 +85,11 @@ export class ListPage {
   }
 
   add() {
-    this.addedItem = {
-      date: null,
-      amount: null,
-      assetItems: []
+    if(this.items.length === 0){
+      this.addedItem = this.dataServ.newSnapshot();
+    }else{
+      this.addedItem = this.dataServ.cloneSnapshot(this.items[0]);
+      this.addedItem.date = null;
     }
     this.nav.push(EditSnapshotPage, { item: this.addedItem });
   }

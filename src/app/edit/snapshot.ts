@@ -5,7 +5,6 @@ import { EditAssetItemPage } from './assetItem'
 import { DataService } from '../service/data.service';
 import { AssetItemEntity } from '../service/entity/assetItem.entity';
 import { SnapshotEntity } from '../service/entity/snapshot.entity';
-import { Util } from '../service/util';
 
 @Component({
   templateUrl: 'snapshot.html'
@@ -26,31 +25,13 @@ export class EditSnapshotPage {
   ) {
     this.originSnapshot = this.navParams.get('item');
 
-    if (this.originSnapshot.date) {
-      this.snapshot = {
-        date: this.originSnapshot.date,
-        amount: this.originSnapshot.amount,
-        assetItems: []
-      };
-      this.originSnapshot.assetItems.forEach((element) => {
-        let item: AssetItemEntity = {
-          date: element.date,
-          no: element.no,
-          platform: element.platform,
-          risk: element.risk,
-          term: element.term,
-          name: element.name,
-          amount: element.amount
-        }
-        this.snapshot.assetItems.push(item);
-      });
+    this.snapshot = this.dataServ.cloneSnapshot(this.originSnapshot);
+
+    if (this.snapshot.date) {
+      //modify
       this.isDateEnable = false;
     } else {
-      this.snapshot = {
-        date: Util.date2str(new Date()),
-        amount: 0,
-        assetItems: []
-      };
+      //create
       this.isDateEnable = true;
     }
   }

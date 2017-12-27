@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { SnapshotEntity } from './entity/snapshot.entity';
 import { CategoryItemEntity } from './entity/categoryItem.entity';
 import { DBService } from './db.service';
+import { AssetItemEntity } from './entity/assetItem.entity';
+import { Util } from './util';
 
 @Injectable()
 export class DataService {
@@ -76,5 +78,39 @@ export class DataService {
           { value: 'long', name: 'Long' }
         ];
     }
+  }
+
+  newSnapshot(): SnapshotEntity {
+    return {
+      date: Util.date2str(new Date()),
+      amount: 0,
+      assetItems: []
+    };
+  }
+
+  cloneSnapshot(item: SnapshotEntity): SnapshotEntity {
+    var cloneItem = {
+      date: item.date,
+      amount: item.amount,
+      assetItems: []
+    };
+
+    item.assetItems.forEach((element) => {
+      cloneItem.assetItems.push(this.cloneAssetItem(element));
+    });
+
+    return cloneItem;
+  }
+
+  cloneAssetItem(item: AssetItemEntity): AssetItemEntity {
+    return {
+      date: item.date,
+      no: item.no,
+      platform: item.platform,
+      risk: item.risk,
+      term: item.term,
+      name: item.name,
+      amount: item.amount
+    };
   }
 }
