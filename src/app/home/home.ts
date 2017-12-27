@@ -67,12 +67,18 @@ export class HomePage implements AfterViewInit {
   }
 
   gotoPrevDate() {
+    if(!this.curSnapshot.date){
+      return Promise.resolve();
+    }
     return this.dataServ.getPrevSnapshot(this.curSnapshot.date).then((res) => {
       res && this.bindSnapshot(res);
     });
   }
 
   gotoNextDate() {
+    if(!this.curSnapshot.date){
+      return Promise.resolve();
+    }
     return this.dataServ.getNextSnapshot(this.curSnapshot.date).then((res) => {
       res && this.bindSnapshot(res);
     });
