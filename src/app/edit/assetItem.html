@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Asset Item Edit</ion-title>
+    <ion-title>{{'TITLE.ASSET_ITEM_EDIT' | lang}}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -9,34 +9,34 @@
     <ion-item>
       <button ion-button icon-left [disabled]="!item.name || !item.amount" (click)="ok()">
         <ion-icon name='checkmark'></ion-icon>
-        Save
+        {{'BUTTON.OK' | lang}}
       </button>
     </ion-item>
     <ion-item>
-      <ion-label>Platform</ion-label>
+      <ion-label>{{'CATEGORY.NAME.PLATFORM' | lang}}</ion-label>
       <ion-select interface="popover" [(ngModel)]="item.platform">
         <ion-option *ngFor="let item of platfomrs" [value]="item.value">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>Risk</ion-label>
+      <ion-label>{{'CATEGORY.NAME.RISK' | lang}}</ion-label>
       <ion-select interface="popover" [(ngModel)]="item.risk">
         <ion-option *ngFor="let item of risks" [value]="item.value">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>Term</ion-label>
+      <ion-label>{{'CATEGORY.NAME.TERM' | lang}}</ion-label>
       <ion-select interface="popover" [(ngModel)]="item.term">
         <ion-option *ngFor="let item of terms" [value]="item.value">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <!-- <ion-label fixed>Name</ion-label> -->
-      <ion-input type="text" placeholder="Name" clearInput [(ngModel)]="item.name"></ion-input>
+      <ion-input type="text" placeholder="{{'TITLE.NAME' | lang}}" clearInput [(ngModel)]="item.name"></ion-input>
     </ion-item>
     <ion-item>
       <!-- <ion-label fixed>Amount</ion-label> -->
-      <ion-input type="number" placeholder="Amount" clearInput min="0" [(ngModel)]="item.amount"></ion-input>
+      <ion-input type="number" placeholder="{{'TITLE.AMOUNT' | lang}}" clearInput min="0" [(ngModel)]="item.amount"></ion-input>
     </ion-item>
   </ion-list>
 

@@ -1,9 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { IonicStorageModule } from '@ionic/storage';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+
+import {LangPackage} from './i18n/langPackage';
+import { LangPipe } from './i18n/langPipe';
 
 import { MyApp } from './app.component';
 import { TabsPage } from './tabs/tabs'
@@ -19,24 +21,27 @@ import { DataService } from './service/data.service';
 import { ChartsService } from './service/charts.service';
 
 var myComponents = [
-  MyApp, 
-  TabsPage, 
-  HomePage, 
-  NavigationPage, 
-  EditSnapshotPage, 
-  EditAssetItemPage, 
-  ListPage, 
+  MyApp,
+  TabsPage,
+  HomePage,
+  NavigationPage,
+  EditSnapshotPage,
+  EditAssetItemPage,
+  ListPage,
   AboutPage];
 
 @NgModule({
-  declarations: myComponents,
-  imports: [BrowserModule, IonicModule.forRoot(MyApp), IonicStorageModule.forRoot()],
+  declarations: [myComponents, LangPipe],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(MyApp)
+  ],
   bootstrap: [IonicApp],
   entryComponents: myComponents,
   providers: [
     StatusBar, SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    DBService, DataService, ChartsService
+    LangPackage, DBService, DataService, ChartsService
   ]
 })
 export class AppModule { }

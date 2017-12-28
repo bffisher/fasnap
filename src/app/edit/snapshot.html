@@ -1,6 +1,6 @@
 <ion-header>
 	<ion-navbar>
-		<ion-title>Snapshot Edit</ion-title>
+		<ion-title>{{'TITLE.SNAPSHOT_EDIT' | lang}}</ion-title>
 	</ion-navbar>
 </ion-header>
 <ion-content class="snapshot-content" padding>
@@ -8,11 +8,11 @@
 		<ion-item>
 			<button ion-button icon-left (click)="add()">
 				<ion-icon name='add'></ion-icon>
-				Add a asset item
+				{{'BUTTON.ADD_ASSET_ITEM' | lang}}
 			</button>
 			<button ion-button icon-left [disabled]="!snapshot.assetItems.length" (click)="save()">
 				<ion-icon name='checkmark'></ion-icon>
-				Save snapshot
+				{{'BUTTON.SAVE_SNAPSHOT' | lang}}
 			</button>
 		</ion-item>
 		<ion-item class="list-item-date" *ngIf="isDateEnable">

@@ -4,11 +4,12 @@ import { SnapshotEntity } from './entity/snapshot.entity';
 import { CategoryItemEntity } from './entity/categoryItem.entity';
 import { DBService } from './db.service';
 import { AssetItemEntity } from './entity/assetItem.entity';
+import { LangPackage } from '../i18n/langPackage';
 
 @Injectable()
 export class DataService {
 
-  constructor(private dbServ: DBService) {
+  constructor(private dbServ: DBService, private lang: LangPackage) {
   }
 
   init(): Promise<any> {
@@ -58,23 +59,23 @@ export class DataService {
     switch (type) {
       case 'platform':
         return [
-          { value: 'bank', name: 'Bank' },
-          { value: 'internet', name: 'Internet' },
-          { value: 'securities', name: 'Securities' },
-          { value: 'other', name: 'Other' }
+          { value: 'bank', name: this.lang.get('CATEGORY.PLATFORM.BANK') },
+          { value: 'internet', name: this.lang.get('CATEGORY.PLATFORM.INTERNET') },
+          { value: 'securities', name: this.lang.get('CATEGORY.PLATFORM.SECURITIES') },
+          { value: 'other', name: this.lang.get('CATEGORY.PLATFORM.OTHER') }
         ];
       case 'risk':
         return [
-          { value: 'low', name: 'Low' },
-          { value: 'middle', name: 'Middle' },
-          { value: 'height', name: 'Height' }
+          { value: 'low', name: this.lang.get('CATEGORY.RISK.LOW') },
+          { value: 'middle', name: this.lang.get('CATEGORY.RISK.MIDDLE') },
+          { value: 'height', name: this.lang.get('CATEGORY.RISK.HEIGHT') }
         ];
       case 'term':
         return [
-          { value: 'current', name: 'Current' },
-          { value: 'short', name: 'Short' },
-          { value: 'middle', name: 'Middle' },
-          { value: 'long', name: 'Long' }
+          { value: 'current', name: this.lang.get('CATEGORY.TERM.CURRENT') },
+          { value: 'short', name: this.lang.get('CATEGORY.TERM.SHORT') },
+          { value: 'middle', name: this.lang.get('CATEGORY.TERM.MIDDLE') },
+          { value: 'long', name: this.lang.get('CATEGORY.TERM.LONG') }
         ];
     }
   }

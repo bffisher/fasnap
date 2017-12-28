@@ -6,6 +6,7 @@ import { SnapshotEntity } from '../service/entity/snapshot.entity';
 import { ListEvent } from '../service/event/list.event';
 import { EditSnapshotPage } from '../edit/snapshot';
 import { ActionSheetController, AlertController } from 'ionic-angular';
+import { LangPackage } from '../i18n/langPackage';
 
 @Component({
   templateUrl: 'list.html'
@@ -20,6 +21,7 @@ export class ListPage {
     public actionsheet: ActionSheetController,
     public alert: AlertController,
     private dataServ: DataService,
+    private lang: LangPackage,
     private listEvent: ListEvent
   ) {
   }
@@ -58,29 +60,29 @@ export class ListPage {
 
   itemClicked(item: SnapshotEntity) {
     let actionSheetImp = this.actionsheet.create({
-      title: 'Options',
+      title: this.lang.get('TITLE.OPTIONS'),
       cssClass: 'action-sheets-basic-page',
       buttons: [
         {
-          text: 'Overview',
+          text: this.lang.get('BUTTON.OVERVIEW'),
           handler: () => {
             this.listEvent.itemClicked(item);
           }
         },
         {
-          text: 'Edit',
+          text: this.lang.get('BUTTON.EDIT'),
           handler: () => {
             this.edit(item);
           }
         },
         {
-          text: 'Delete',
+          text: this.lang.get('BUTTON.DELETE'),
           handler: () => {
             this.del(item);
           }
         },
         {
-          text: 'Cancel',
+          text: this.lang.get('BUTTON.CANCEL'),
           role: 'cancel', // will always sort to be on the bottom
           handler: () => {
           }
@@ -108,15 +110,15 @@ export class ListPage {
   del(item) {
     let alertImp = this.alert.create({
       //title: 'Warn!',
-      subTitle: 'Do you want to delete this item?',
+      subTitle: this.lang.get('TEXT.DELETE_CONFIRM'),
       buttons: [
         {
-          text: 'Cancel',
+          text: this.lang.get('BUTTON.CANCEL'),
           handler: data => {
           }
         },
         {
-          text: 'OK',
+          text: this.lang.get('BUTTON.OK'),
           handler: data => {
             this.dataServ.deleteSnapshot(item.date).then(() => {
               let index4del = -1;

@@ -1,23 +1,23 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <ion-title>{{'TITLE.HOME' | lang}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="home-content" padding>
   <ion-item>
     <button ion-button color="light" icon-start (click)="gotoPrevDate()">
-      <ion-icon name='arrow-back'></ion-icon>
-      Back
+      <ion-icon name="arrow-back"></ion-icon>
+      {{'BUTTON.PREV' | lang }}
     </button>
     <span>{{curSnapshot && curSnapshot.date | date:"longDate"}}</span>
     <button ion-button color="light" icon-end (click)="gotoNextDate()">
-      Next
-      <ion-icon name='arrow-forward'></ion-icon>
+      {{'BUTTON.NEXT' | lang }}
+      <ion-icon name="arrow-forward"></ion-icon>
     </button>
   </ion-item>
   <ion-item>
-    <span>total:</span>
+    <span>{{'TITLE.TOTAL_AMOUNT' | lang}}:</span>
     <span>{{curSnapshot && curSnapshot.amount | currency:'￥':'.0'}}</span>
   </ion-item>
   <ion-item>

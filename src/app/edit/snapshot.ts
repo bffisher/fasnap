@@ -6,6 +6,7 @@ import { DataService } from '../service/data.service';
 import { AssetItemEntity } from '../service/entity/assetItem.entity';
 import { SnapshotEntity } from '../service/entity/snapshot.entity';
 import { Util } from '../service/util';
+import { LangPackage } from '../i18n/langPackage';
 
 @Component({
   templateUrl: 'snapshot.html'
@@ -22,6 +23,7 @@ export class EditSnapshotPage {
     public actionsheet: ActionSheetController,
     public alert: AlertController,
     public navParams: NavParams,
+    private lang: LangPackage,
     private dataServ: DataService
   ) {
     this.originSnapshot = this.navParams.get('item');
@@ -58,23 +60,23 @@ export class EditSnapshotPage {
 
   itemSelected(item: AssetItemEntity) {
     let actionSheetImp = this.actionsheet.create({
-      title: 'Options',
+      title: this.lang.get('TITLE.OPTIONS'),
       cssClass: 'action-sheets-basic-page',
       buttons: [
         {
-          text: 'Edit',
+          text: this.lang.get('BUTTON.EDIT'),
           handler: () => {
             this.edit(item);
           }
         },
         {
-          text: 'Delete',
+          text: this.lang.get('BUTTON.DELETE'),
           handler: () => {
             this.del(item);
           }
         },
         {
-          text: 'Cancel',
+          text: this.lang.get('BUTTON.CANCEL'),
           role: 'cancel', // will always sort to be on the bottom
           handler: () => {
             console.log('Cancel clicked');
@@ -92,10 +94,10 @@ export class EditSnapshotPage {
         if (res && res.length > 0) {
           //exist
           let alertImp = this.alert.create({
-            subTitle: 'Data of "' + this.snapshot.date + '" already exists!',
+            subTitle: this.lang.get('TEXT.DATE_SNAPSHOT_EXIST_INFO', this.snapshot.date),
             buttons: [
               {
-                text: 'OK'
+                text: this.lang.get('BUTTON.OK'),
               }]
           });
           alertImp.present();
@@ -142,15 +144,15 @@ export class EditSnapshotPage {
   private del(item: AssetItemEntity) {
     let alertImp = this.alert.create({
       //title: 'Warn!',
-      subTitle: 'Do you want to delete this item?',
+      subTitle: this.lang.get('TEXT.DELETE_CONFIRM'),
       buttons: [
         {
-          text: 'Cancel',
+          text: this.lang.get('BUTTON.CANCEL'),
           handler: data => {
           }
         },
         {
-          text: 'OK',
+          text: this.lang.get('BUTTON.OK'),
           handler: data => {
             let index4del = -1;
             for (let i = 0; i < this.snapshot.assetItems.length; i++) {

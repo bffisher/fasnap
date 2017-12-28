@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { TabsPage } from './tabs/tabs'
 import { DataService } from './service/data.service';
+import { LangPackage } from './i18n/langPackage';
 
 @Component({
   template: '<ion-nav [root]="rootPage"></ion-nav>'
@@ -12,7 +13,15 @@ import { DataService } from './service/data.service';
 export class MyApp {
   rootPage: any;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, dataServ: DataService) {
+  constructor(
+    platform: Platform,
+    statusBar: StatusBar,
+    splashScreen: SplashScreen,
+    langPackage: LangPackage,
+    dataServ: DataService
+  ) {
+    langPackage.setLang(navigator.language);
+
     splashScreen.show();
     platform.ready().then(() => {
       dataServ.init().then(() => {
@@ -20,7 +29,7 @@ export class MyApp {
         // Here you can do any higher level native things you might need.
         statusBar.styleDefault();
         this.rootPage = TabsPage;
-        setTimeout(()=>{
+        setTimeout(() => {
           splashScreen.hide();
         }, 1000);
       });
